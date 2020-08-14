@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C002DFDC24E7290400E0C658 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFDB24E7290400E0C658 /* main.cpp */; };
+		C002DFE424E7296800E0C658 /* GameGlass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFE224E7296800E0C658 /* GameGlass.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		C002DFD824E7290400E0C658 /* TopDownScroller */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TopDownScroller; sourceTree = BUILT_PRODUCTS_DIR; };
 		C002DFDB24E7290400E0C658 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		C002DFE224E7296800E0C658 /* GameGlass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameGlass.cpp; sourceTree = "<group>"; };
+		C002DFE324E7296800E0C658 /* GameGlass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameGlass.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				C002DFDB24E7290400E0C658 /* main.cpp */,
+				C002DFE224E7296800E0C658 /* GameGlass.cpp */,
+				C002DFE324E7296800E0C658 /* GameGlass.hpp */,
 			);
 			path = TopDownScroller;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C002DFE424E7296800E0C658 /* GameGlass.cpp in Sources */,
 				C002DFDC24E7290400E0C658 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
