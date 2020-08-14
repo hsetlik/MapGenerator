@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		C002DFDC24E7290400E0C658 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFDB24E7290400E0C658 /* main.cpp */; };
 		C002DFE424E7296800E0C658 /* GameGlass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFE224E7296800E0C658 /* GameGlass.cpp */; };
+		C002DFE924E72BF800E0C658 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFE824E72BF800E0C658 /* SDL2.framework */; };
+		C002DFEA24E72BF800E0C658 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFE824E72BF800E0C658 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C002DFED24E72C0C00E0C658 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */; };
+		C002DFEE24E72C0C00E0C658 /* SDL2_image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -21,6 +25,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		C002DFEB24E72BF800E0C658 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C002DFEA24E72BF800E0C658 /* SDL2.framework in Embed Frameworks */,
+				C002DFEE24E72C0C00E0C658 /* SDL2_image.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +44,9 @@
 		C002DFDB24E7290400E0C658 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C002DFE224E7296800E0C658 /* GameGlass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameGlass.cpp; sourceTree = "<group>"; };
 		C002DFE324E7296800E0C658 /* GameGlass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameGlass.hpp; sourceTree = "<group>"; };
+		C002DFE824E72BF800E0C658 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
+		C002DFEF24E72C1500E0C658 /* TopDownScroller.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TopDownScroller.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C002DFE924E72BF800E0C658 /* SDL2.framework in Frameworks */,
+				C002DFED24E72C0C00E0C658 /* SDL2_image.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +67,7 @@
 			children = (
 				C002DFDA24E7290400E0C658 /* TopDownScroller */,
 				C002DFD924E7290400E0C658 /* Products */,
+				C002DFE724E72BF800E0C658 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,11 +82,21 @@
 		C002DFDA24E7290400E0C658 /* TopDownScroller */ = {
 			isa = PBXGroup;
 			children = (
+				C002DFEF24E72C1500E0C658 /* TopDownScroller.entitlements */,
 				C002DFDB24E7290400E0C658 /* main.cpp */,
 				C002DFE224E7296800E0C658 /* GameGlass.cpp */,
 				C002DFE324E7296800E0C658 /* GameGlass.hpp */,
 			);
 			path = TopDownScroller;
+			sourceTree = "<group>";
+		};
+		C002DFE724E72BF800E0C658 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */,
+				C002DFE824E72BF800E0C658 /* SDL2.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -77,6 +109,7 @@
 				C002DFD424E7290400E0C658 /* Sources */,
 				C002DFD524E7290400E0C658 /* Frameworks */,
 				C002DFD624E7290400E0C658 /* CopyFiles */,
+				C002DFEB24E72BF800E0C658 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -244,9 +277,14 @@
 		C002DFE024E7290400E0C658 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TopDownScroller/TopDownScroller.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9GGFZC47P2;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -254,9 +292,14 @@
 		C002DFE124E7290400E0C658 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TopDownScroller/TopDownScroller.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9GGFZC47P2;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
