@@ -13,6 +13,7 @@
 		C002DFEA24E72BF800E0C658 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFE824E72BF800E0C658 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C002DFED24E72C0C00E0C658 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */; };
 		C002DFEE24E72C0C00E0C658 /* SDL2_image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C002DFF224E72D2D00E0C658 /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFF024E72D2D00E0C658 /* TextureManager.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,8 @@
 		C002DFE824E72BF800E0C658 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		C002DFEF24E72C1500E0C658 /* TopDownScroller.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TopDownScroller.entitlements; sourceTree = "<group>"; };
+		C002DFF024E72D2D00E0C658 /* TextureManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
+		C002DFF124E72D2D00E0C658 /* TextureManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TextureManager.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,8 @@
 				C002DFDB24E7290400E0C658 /* main.cpp */,
 				C002DFE224E7296800E0C658 /* GameGlass.cpp */,
 				C002DFE324E7296800E0C658 /* GameGlass.hpp */,
+				C002DFF024E72D2D00E0C658 /* TextureManager.cpp */,
+				C002DFF124E72D2D00E0C658 /* TextureManager.hpp */,
 			);
 			path = TopDownScroller;
 			sourceTree = "<group>";
@@ -159,6 +164,7 @@
 			files = (
 				C002DFE424E7296800E0C658 /* GameGlass.cpp in Sources */,
 				C002DFDC24E7290400E0C658 /* main.cpp in Sources */,
+				C002DFF224E72D2D00E0C658 /* TextureManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
