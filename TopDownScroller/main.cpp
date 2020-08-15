@@ -21,7 +21,7 @@ int frameDelay;
 int main(int argc, const char * argv[]) {
     game = new Game();
     //grid = new Grid();
-    game-> init("Title", 600, 600, windowWidth, windowHeight, false);
+    game-> init("Map Generator", 600, 600, windowWidth, windowHeight, false);
     while(game->running()){
         frameStart = SDL_GetTicks();
         game->handleEvents();

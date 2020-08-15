@@ -12,9 +12,9 @@ Tile::Tile(){
 }
 Tile::~Tile(){
 }
-void Tile::init(int xPos, int yPos){
-    _xPos = xPos;
-    _yPos = yPos;
+void Tile::init(int xSet, int ySet){
+    xPos = xSet;
+    yPos = ySet;
     isLand = false;
     textureIndex = 0;
 }
@@ -85,9 +85,116 @@ Landmass::Landmass(){
 }
 Landmass::~Landmass(){
 }
-
 void Landmass::init(int xStart, int yStart, Map chosenMap){
+    xOrigin = xStart;
+    yOrigin = yStart;
     map = chosenMap;
-    
-    
+    map = chosenMap;
+    memberCount = 0;
+    optionCount = 0;
+}
+void Landmass::updateOptions(int xPos, int yPos){
+    int x = xPos;
+    int y = yPos;
+    Tile adjacentTiles[4];
+    adjacentTiles[0] = map.memberTiles[x][y - 1]; //top
+    adjacentTiles[1] = map.memberTiles[x + 1][y]; //right
+    adjacentTiles[2] = map.memberTiles[x][y + 1]; //bottom
+    adjacentTiles[3] = map.memberTiles[x - 1][y]; //left
+    for(int i = 0; i < 4; i++){
+        int xOpt = adjacentTiles[i].xPos;
+        int yOpt = adjacentTiles[i].yPos;
+        bool free = true;
+        for(int n = 0; n < optionCount; n++){
+            if((_optionTiles[n].xPos == xOpt) && (_optionTiles[n].yPos == yOpt)){
+                free = false;
+            }
+        }
+        if(free){
+            _optionTiles[optionCount] = adjacentTiles[i];
+            optionCount++;
+        }
+    }
+}
+void Landmass::placeFirstTile(int texIndex){
+    map.memberTiles[xOrigin][yOrigin].textureIndex = texIndex;
+    map.memberTiles[xOrigin][yOrigin].isLand = true;
+    _landMembers[memberCount] = map.memberTiles[xOrigin][yOrigin];
+    memberCount++;
+    updateOptions(xOrigin, yOrigin);
+}
+
+int Landmass::adjacentOfType(Tile checkTile, int texIndex){
+    int x = checkTile.xPos;
+    int y = checkTile.yPos;
+    int texture = texIndex;
+    int typeCounter = 0;
+    Tile adjacentTiles[4];
+    adjacentTiles[0] = map.memberTiles[x][y - 1]; //top
+    adjacentTiles[1] = map.memberTiles[x + 1][y]; //right
+    adjacentTiles[2] = map.memberTiles[x][y + 1]; //bottom
+    adjacentTiles[3] = map.memberTiles[x - 1][y]; //left
+    for(int i = 0; i < 4; i++){
+        if(adjacentTiles[i].textureIndex == texture){
+            typeCounter++;
+        }
+    }
+    return typeCounter;
+}
+
+int Landmass::secondOrderOfType(Tile checkTile, int texIndex){
+    int x = checkTile.xPos;
+    int y = checkTile.yPos;
+    Tile adjacentTiles[4];
+    adjacentTiles[0] = map.memberTiles[x][y - 1]; //top
+    adjacentTiles[1] = map.memberTiles[x + 1][y]; //right
+    adjacentTiles[2] = map.memberTiles[x][y + 1]; //bottom
+    adjacentTiles[3] = map.memberTiles[x - 1][y]; //left
+    Tile secondOrderAdjacents[12];
+    int xA = adjacentTiles[0].xPos;
+    int yA = adjacentTiles[0].yPos;
+    secondOrderAdjacents[0] = map.memberTiles[xA][yA -1]; //top.top
+    secondOrderAdjacents[1] = map.memberTiles[xA + 1][yA]; //top.right
+    secondOrderAdjacents[2] = map.memberTiles[xA - 1][yA]; //top.left
+    int xB = adjacentTiles[1].xPos;
+    int yB = adjacentTiles[1].yPos;
+    secondOrderAdjacents[3] = map.memberTiles[xB][yB -1]; //right.top
+    secondOrderAdjacents[4] = map.memberTiles[xB + 1][yB];// right.right
+    secondOrderAdjacents[5] = map.memberTiles[xB][yB + 1]; //right.bottom
+    int xC = adjacentTiles[2].xPos;
+    int yC = adjacentTiles[2].yPos;
+    secondOrderAdjacents[6] = map.memberTiles[xC + 1][yC];//bottom.right
+    secondOrderAdjacents[7] = map.memberTiles[xC][yC + 1]; //bottom.bottom
+    secondOrderAdjacents[8] = map.memberTiles[xC -1][yC];
+    int xD = adjacentTiles[3].xPos;
+    int yD = adjacentTiles[3].yPos;
+    secondOrderAdjacents[9] = map.memberTiles[xD][yD -1];//left top
+    secondOrderAdjacents[10] = map.memberTiles[xD][yD + 1];//left bottom
+    secondOrderAdjacents[11] = map.memberTiles[xD - 1][yD];//left left
+    int count = 0;
+    for(int i = 0; i < 12; i++){
+        if(secondOrderAdjacents[i].textureIndex == texIndex)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+int Landmass::grassWeight(Tile checkTile){
+    int weight  = 0;
+    int adjacent1 = adjacentOfType(checkTile, 1);
+    adjacent1 = adjacent1 * 3;
+    int adjacent2 = secondOrderOfType(checkTile, 1);
+    weight = adjacent1 + adjacent2;
+    return weight;
+}
+
+int Landmass::desertWeight(Tile checkTile){
+    int weight  = 0;
+    int adjacent1 = adjacentOfType(checkTile, 2);
+    adjacent1 = adjacent1 * 3;
+    int adjacent2 = secondOrderOfType(checkTile, 2);
+    weight = adjacent1 + adjacent2;
+    return weight;
 }

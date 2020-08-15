@@ -11,6 +11,7 @@
 #include "/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h"
 #include "/Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h"
 #include <stdio.h>
+#include <cmath>
 
 
 class Tile {
@@ -21,11 +22,12 @@ public:
     bool isLand;
     int textureIndex;
     SDL_Texture * currentTexture;
+    int xPos;
+    int yPos;
 private:
     int _grassWeight;
     int _desertWeight;
-    int _xPos;
-    int _yPos;
+ 
 };
 
 
@@ -49,21 +51,23 @@ public:
     Landmass();
     ~Landmass();
     void init(int xStart, int yStart, Map chosenMap);
-    int xStart;
-    int yStart;
+    int xOrigin;
+    int yOrigin;
     Tile mapTiles[80][43];
     Map map;
-    int adjacentOfType(Tile checkTile, int textureIndex);
-    void assignWeights(Tile tile);
-    int grassWeight(Tile tile);
-    int desertWeight(Tile tile);
+    void placeFirstTile(int textureIndex);
+    int adjacentOfType(Tile checkTile, int texIndex);
+    int secondOrderOfType(Tile checkTile, int texIndex);
+    void calculateWeights();
+    int grassWeight(Tile checkTile);
+    int desertWeight(Tile checkTile);
     void populate(Tile startingTile, int numTiles);
-    void updateOptions();
+    void updateOptions(int xPos, int yPos);
     int memberCount;
     int optionCount;
 private:
     Tile _landMembers[128];
-    int _optionCoords[256][256];
+    Tile _optionTiles[256];
 };
 
 #endif /* GameObjects_hpp */
