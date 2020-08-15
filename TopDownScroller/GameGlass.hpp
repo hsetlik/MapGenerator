@@ -11,6 +11,8 @@
 #include "/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h"
 #include "/Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h"
 #include <stdio.h>
+#include "TextureManager.hpp"
+
 
 class Game{
 public:

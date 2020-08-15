@@ -11,7 +11,7 @@
 
 Game *game= nullptr;
 const int windowWidth = 1200;
-const int windowHeight = 650;
+const int windowHeight = 645;
 const int FPS = 60;
 const int frameTime = 1000/FPS;
 
