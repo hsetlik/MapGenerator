@@ -19,22 +19,6 @@ void Tile::init(int xPos, int yPos){
     textureIndex = 0;
 }
 
-void Tile::updateTexture(){
-    switch (textureIndex) {
-        case 0:{
-            currentTexture = oceanBase;
-            break;}
-        case 1:{
-            currentTexture = grassBase;
-            break; }
-        case 2:{
-            currentTexture = desertBase;
-        }
-        default:
-            break;
-    }
-}
-
 
 Map::Map(){
 }
@@ -48,7 +32,27 @@ void Map::initMemberTiles(){
         }
     }
 }
-
+void Map::assignTextures(){
+    for(int x = 0; x < 80; x++){
+        for(int y = 0; y < 43; y++){
+            int texIndex = memberTiles[x][y].textureIndex;
+            switch(texIndex){
+                case 0:{
+                    memberTiles[x][y].currentTexture = oceanBase;
+                    break;
+                }
+                case 1:{
+                    memberTiles[x][y].currentTexture = grassBase;
+                    break;
+                }
+                case 2:{
+                    memberTiles[x][y].currentTexture = desertBase;
+                    break;
+                }
+            }
+        }
+    }
+}
 void Map::loadAllTextures(SDL_Renderer * renderer){
     SDL_Surface * tempSurface1 = IMG_Load("/Users/SFMAdmin/Desktop/Programming/SDL_projects/TopDownScroller/Tiles/Tile_0000_Ocean_Default.png");
     oceanBase = SDL_CreateTextureFromSurface(renderer, tempSurface1);
@@ -62,9 +66,10 @@ void Map::loadAllTextures(SDL_Renderer * renderer){
 }
 
 void Map::renderMap(SDL_Renderer *renderer){
+    assignTextures();
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
-            SDL_Texture *texture = memberTiles[x][y].currentTexture;
+            static SDL_Texture *texture = memberTiles[x][y].currentTexture;
             SDL_Rect destRect;
             destRect.w = 15;
             destRect.h = 15;
@@ -74,4 +79,15 @@ void Map::renderMap(SDL_Renderer *renderer){
             
         }
     }
+}
+
+Landmass::Landmass(){
+}
+Landmass::~Landmass(){
+}
+
+void Landmass::init(int xStart, int yStart, Map chosenMap){
+    map = chosenMap;
+    
+    
 }

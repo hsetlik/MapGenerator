@@ -8,14 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		C002DFDC24E7290400E0C658 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFDB24E7290400E0C658 /* main.cpp */; };
-		C002DFE424E7296800E0C658 /* GameGlass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFE224E7296800E0C658 /* GameGlass.cpp */; };
+		C002DFE424E7296800E0C658 /* GameClass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFE224E7296800E0C658 /* GameClass.cpp */; };
 		C002DFE924E72BF800E0C658 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFE824E72BF800E0C658 /* SDL2.framework */; };
 		C002DFEA24E72BF800E0C658 /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFE824E72BF800E0C658 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C002DFED24E72C0C00E0C658 /* SDL2_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */; };
 		C002DFEE24E72C0C00E0C658 /* SDL2_image.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C002DFF224E72D2D00E0C658 /* TextureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C002DFF024E72D2D00E0C658 /* TextureManager.cpp */; };
 		C036CEB524E7738E0098B8E1 /* GameObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C036CEB324E7738E0098B8E1 /* GameObjects.cpp */; };
-		C036CEB824E792520098B8E1 /* Landmass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C036CEB624E792520098B8E1 /* Landmass.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,17 +43,13 @@
 /* Begin PBXFileReference section */
 		C002DFD824E7290400E0C658 /* TopDownScroller */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TopDownScroller; sourceTree = BUILT_PRODUCTS_DIR; };
 		C002DFDB24E7290400E0C658 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		C002DFE224E7296800E0C658 /* GameGlass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameGlass.cpp; sourceTree = "<group>"; };
-		C002DFE324E7296800E0C658 /* GameGlass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameGlass.hpp; sourceTree = "<group>"; };
+		C002DFE224E7296800E0C658 /* GameClass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameClass.cpp; sourceTree = "<group>"; };
+		C002DFE324E7296800E0C658 /* GameClass.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameClass.hpp; sourceTree = "<group>"; };
 		C002DFE824E72BF800E0C658 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		C002DFEC24E72C0B00E0C658 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		C002DFEF24E72C1500E0C658 /* TopDownScroller.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TopDownScroller.entitlements; sourceTree = "<group>"; };
-		C002DFF024E72D2D00E0C658 /* TextureManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextureManager.cpp; sourceTree = "<group>"; };
-		C002DFF124E72D2D00E0C658 /* TextureManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TextureManager.hpp; sourceTree = "<group>"; };
 		C036CEB324E7738E0098B8E1 /* GameObjects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameObjects.cpp; sourceTree = "<group>"; };
 		C036CEB424E7738E0098B8E1 /* GameObjects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameObjects.hpp; sourceTree = "<group>"; };
-		C036CEB624E792520098B8E1 /* Landmass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Landmass.cpp; sourceTree = "<group>"; };
-		C036CEB724E792520098B8E1 /* Landmass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Landmass.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,14 +87,10 @@
 			children = (
 				C002DFEF24E72C1500E0C658 /* TopDownScroller.entitlements */,
 				C002DFDB24E7290400E0C658 /* main.cpp */,
-				C002DFE224E7296800E0C658 /* GameGlass.cpp */,
-				C002DFE324E7296800E0C658 /* GameGlass.hpp */,
-				C002DFF024E72D2D00E0C658 /* TextureManager.cpp */,
-				C002DFF124E72D2D00E0C658 /* TextureManager.hpp */,
+				C002DFE224E7296800E0C658 /* GameClass.cpp */,
+				C002DFE324E7296800E0C658 /* GameClass.hpp */,
 				C036CEB324E7738E0098B8E1 /* GameObjects.cpp */,
 				C036CEB424E7738E0098B8E1 /* GameObjects.hpp */,
-				C036CEB624E792520098B8E1 /* Landmass.cpp */,
-				C036CEB724E792520098B8E1 /* Landmass.hpp */,
 			);
 			path = TopDownScroller;
 			sourceTree = "<group>";
@@ -173,10 +163,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C036CEB524E7738E0098B8E1 /* GameObjects.cpp in Sources */,
-				C002DFE424E7296800E0C658 /* GameGlass.cpp in Sources */,
-				C036CEB824E792520098B8E1 /* Landmass.cpp in Sources */,
+				C002DFE424E7296800E0C658 /* GameClass.cpp in Sources */,
 				C002DFDC24E7290400E0C658 /* main.cpp in Sources */,
-				C002DFF224E72D2D00E0C658 /* TextureManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include "GameGlass.hpp"
+#include "GameClass.hpp"
 
 Game *game= nullptr;
 const int windowWidth = 1200;

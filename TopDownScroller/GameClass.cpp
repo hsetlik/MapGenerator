@@ -6,7 +6,10 @@
 //  Copyright © 2020 Hayden Setlik. All rights reserved.
 //
 
-#include "GameGlass.hpp"
+#include "GameClass.hpp"
+
+Map workingMap;
+
 Game::Game() {
     }
 Game::~Game(){
@@ -34,6 +37,8 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
         }
         isRunning = true;
     }
+    workingMap.initMemberTiles();
+    workingMap.loadAllTextures(renderer);
     //Load Images here
 }
 
@@ -56,7 +61,7 @@ void Game::handleEvents()
 
 void Game::render(){
     SDL_RenderClear(renderer);
-    //draw stuff here
+    workingMap.renderMap(renderer);
     SDL_RenderPresent(renderer);
 }
 

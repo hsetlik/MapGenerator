@@ -8,11 +8,10 @@
 
 #ifndef GameObjects_hpp
 #define GameObjects_hpp
-#include "GameGlass.hpp"
+#include "/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h"
+#include "/Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h"
 #include <stdio.h>
-SDL_Texture * oceanBase;
-SDL_Texture * grassBase;
-SDL_Texture * desertBase;
+
 
 class Tile {
 public:
@@ -21,7 +20,6 @@ public:
     void init(int xPos, int yPos);
     bool isLand;
     int textureIndex;
-    void updateTexture();
     SDL_Texture * currentTexture;
 private:
     int _grassWeight;
@@ -35,10 +33,37 @@ class Map {
 public:
     Map();
     ~Map();
+    SDL_Texture * oceanBase;
+    SDL_Texture * grassBase;
+    SDL_Texture * desertBase;
     Tile memberTiles[80][43];
     void loadAllTextures(SDL_Renderer* renderer);
+    void assignTextures();
     void initMemberTiles();
     void renderMap(SDL_Renderer * renderer);
+};
+
+
+class Landmass{
+public:
+    Landmass();
+    ~Landmass();
+    void init(int xStart, int yStart, Map chosenMap);
+    int xStart;
+    int yStart;
+    Tile mapTiles[80][43];
+    Map map;
+    int adjacentOfType(Tile checkTile, int textureIndex);
+    void assignWeights(Tile tile);
+    int grassWeight(Tile tile);
+    int desertWeight(Tile tile);
+    void populate(Tile startingTile, int numTiles);
+    void updateOptions();
+    int memberCount;
+    int optionCount;
+private:
+    Tile _landMembers[128];
+    int _optionCoords[256][256];
 };
 
 #endif /* GameObjects_hpp */

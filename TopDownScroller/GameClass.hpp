@@ -8,10 +8,7 @@
 
 #ifndef GameGlass_hpp
 #define GameGlass_hpp
-#include "/Library/Frameworks/SDL2.framework/Versions/A/Headers/SDL.h"
-#include "/Library/Frameworks/SDL2_image.framework/Headers/SDL_image.h"
-#include <stdio.h>
-#include "TextureManager.hpp"
+#include "GameObjects.hpp"
 
 
 class Game{
@@ -28,6 +25,7 @@ public:
     //manages memory
     void clean();
     bool running() {return isRunning;}
+    
 private:
     int _redlevel = 255;
     bool isRunning;
