@@ -40,7 +40,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     }
     workingMap.initMemberTiles();
     workingMap.loadAllTextures(renderer);
-    
+    newLandmass.init(workingMap);
 }
 
 void Game::handleEvents()
@@ -52,9 +52,12 @@ void Game::handleEvents()
             isRunning = false;
             break;
         case SDL_MOUSEBUTTONDOWN:{
-            printf("Mouse Clicked\n");
-            newLandmass.init(workingMap);
-            newLandmass.createLandmass(workingMap.memberTiles[31][22], 1, 18);
+            Tile clickedTile = workingMap.tileClicked();
+            clickedTile.isClicked();
+            workingMap.printTextures();
+            if(newLandmass.created == false){
+                newLandmass.createLandmass(clickedTile, 1, 30);
+            }
             //do stuff when the mouse is clicked
             break;
         }

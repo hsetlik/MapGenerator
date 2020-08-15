@@ -24,6 +24,7 @@ public:
     SDL_Texture * currentTexture;
     int xPos;
     int yPos;
+    void isClicked();
 private:
     int _grassWeight;
     int _desertWeight;
@@ -42,6 +43,9 @@ public:
     void loadAllTextures(SDL_Renderer* renderer);
     void assignTextures();
     void initMemberTiles();
+    void sendClick();
+    Tile tileClicked();
+    void printTextures();
     void renderMap(SDL_Renderer * renderer);
 };
 
@@ -64,6 +68,7 @@ public:
     void updateOptions(int xPos, int yPos);
     int memberCount;
     int optionCount;
+    bool created;
 private:
     Tile _landMembers[128];
     Tile _optionTiles[256];

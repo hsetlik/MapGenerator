@@ -18,7 +18,15 @@ void Tile::init(int xSet, int ySet){
     isLand = false;
     textureIndex = 0;
 }
-
+void Tile:: isClicked(){
+    printf("Tile is at: %d, %d\n", xPos, yPos);
+    printf("My texture is: %d\n", textureIndex);
+    if(isLand){
+        printf("I am on land\n");
+    } else {
+        printf("I am in the ocean\n");
+    }
+}
 
 Map::Map(){
 }
@@ -42,10 +50,12 @@ void Map::assignTextures(){
                     break;
                 }
                 case 1:{
+                    printf("texture 1 assigned at: %d, %d\n", x, y);
                     memberTiles[x][y].currentTexture = grassBase;
                     break;
                 }
                 case 2:{
+                    printf("texture 2 assigned at: %d, %d\n", x, y);
                     memberTiles[x][y].currentTexture = desertBase;
                     break;
                 }
@@ -69,16 +79,58 @@ void Map::renderMap(SDL_Renderer *renderer){
     assignTextures();
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
-            static SDL_Texture *texture = memberTiles[x][y].currentTexture;
+            SDL_Texture *texture = memberTiles[x][y].currentTexture;
             SDL_Rect destRect;
             destRect.w = 15;
             destRect.h = 15;
             destRect.x = 15 * x;
             destRect.y = 15 * y;
             SDL_RenderCopy(renderer, texture, NULL, &destRect);
+            if(memberTiles[x][y].textureIndex != 0){
+                printf("Nonzero texture at: %d, %d.  Texture ID is: %d\n", x, y, memberTiles[x][y].textureIndex);
+            }
             
         }
     }
+}
+
+void Map::sendClick(){
+    double _clickX;
+    double _clickY;
+    int xClickPx;
+    int yClickPx;
+    SDL_GetMouseState(&xClickPx, &yClickPx);
+    _clickX = xClickPx / 15;
+    _clickY = yClickPx / 15;
+    int clickX = round(_clickX);
+    int clickY = round(_clickY);
+    memberTiles[clickX][clickY].isClicked();
+}
+
+Tile Map::tileClicked(){
+    double _clickX;
+    double _clickY;
+    int xClickPx;
+    int yClickPx;
+    SDL_GetMouseState(&xClickPx, &yClickPx);
+    _clickX = xClickPx / 15;
+    _clickY = yClickPx / 15;
+    int clickX = round(_clickX);
+    int clickY = round(_clickY);
+    return memberTiles[clickX][clickY];
+}
+
+void Map::printTextures(){
+    printf("starting texture printing...\n");
+    for(int x = 0; x < 80; x++){
+        for(int y = 0; y < 43; y++){
+            int thisTexture = memberTiles[x][y].textureIndex;
+            if(thisTexture != 0){
+                printf("Texture is %d at: %d, %d\n", thisTexture, x, y);
+            }
+        }
+    }
+    printf("texture printing finished\n");
 }
 
 Landmass::Landmass(){
@@ -89,6 +141,7 @@ void Landmass::init(Map chosenMap){
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
+    created = false;
     printf("Landmass initialized\n");
 }
 void Landmass::updateOptions(int xPos, int yPos){
@@ -129,6 +182,7 @@ void Landmass::placeFirstTile(Tile startingTile, int texIndex){
     memberCount++;
     updateOptions(xOrigin, yOrigin);
     printf("first tile placed\n");
+    map.assignTextures();
 }
 
 int Landmass::adjacentOfType(Tile checkTile, int texIndex){
@@ -217,16 +271,25 @@ void Landmass::addTile(){
     dWeight += rand() % 8;
     int texChoice;
     if(dWeight < gWeight){
+        printf("Grass chosen\n");
         texChoice = 1;
     } else {
+        printf("Sand chosen\n");
         texChoice = 2;
     }
+    int cX = chosenTile.xPos;
+    int cY = chosenTile.yPos;
     chosenTile.isLand = true;
     _landMembers[memberCount] = chosenTile;
     chosenTile.textureIndex = texChoice;
+    map.memberTiles[cX][cY].textureIndex = texChoice;
     memberCount++;
     printf("Tile placed at: [%d][%d]\n", chosenTile.xPos, chosenTile.yPos);
+    printf("Texture index: %d\n", chosenTile.textureIndex);
+    printf("Map texture index: %d\n", map.memberTiles[cX][cY].textureIndex);
     updateOptions(chosenTile.xPos, chosenTile.yPos);
+    map.assignTextures();
+    printf("Assigned Map texture index: %d\n", map.memberTiles[cX][cY].textureIndex);
 }
 
 void Landmass::createLandmass(Tile firstTile, int firstTex, int numTiles){
@@ -234,5 +297,6 @@ void Landmass::createLandmass(Tile firstTile, int firstTex, int numTiles){
     for(int i = 0; i < numTiles; i++){
         addTile();
     }
+    created = true;
     printf("landmass created\n");
 }
