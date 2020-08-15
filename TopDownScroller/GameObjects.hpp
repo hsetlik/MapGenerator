@@ -10,7 +10,9 @@
 #define GameObjects_hpp
 #include "GameGlass.hpp"
 #include <stdio.h>
-
+SDL_Texture * oceanBase;
+SDL_Texture * grassBase;
+SDL_Texture * desertBase;
 
 class Tile {
 public:
@@ -18,14 +20,14 @@ public:
     ~Tile();
     void init(int xPos, int yPos);
     bool isLand;
-    int grasslandWeight();
-    int desertWeight();
-    void assignTexture(SDL_Texture * texture);
     int textureIndex;
-    SDL_Texture * textureChoice;
+    void updateTexture();
+    SDL_Texture * currentTexture;
 private:
+    int _grassWeight;
+    int _desertWeight;
     int _xPos;
-    int _xpos;
+    int _yPos;
 };
 
 
@@ -34,7 +36,9 @@ public:
     Map();
     ~Map();
     Tile memberTiles[80][43];
+    void loadAllTextures(SDL_Renderer* renderer);
     void initMemberTiles();
+    void renderMap(SDL_Renderer * renderer);
 };
 
 #endif /* GameObjects_hpp */

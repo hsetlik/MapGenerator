@@ -7,3 +7,14 @@
 //
 
 #include "Landmass.hpp"
+
+Landmass::Landmass(){
+}
+Landmass::~Landmass(){
+}
+
+void Landmass::init(int xStart, int yStart, Map chosenMap){
+    map = chosenMap;
+    
+    
+}

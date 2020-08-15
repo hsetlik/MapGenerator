@@ -17,11 +17,21 @@ public:
     Landmass();
     ~Landmass();
     void init(int xStart, int yStart, Map chosenMap);
+    int xStart;
+    int yStart;
     Tile mapTiles[80][43];
     Map map;
     int adjacentOfType(Tile checkTile, int textureIndex);
     void assignWeights(Tile tile);
+    int grassWeight(Tile tile);
+    int desertWeight(Tile tile);
     void populate(Tile startingTile, int numTiles);
+    void updateOptions();
+    int memberCount;
+    int optionCount;
+private:
+    Tile _landMembers[128];
+    int _optionCoords[256][256];
 };
 
 #endif /* Landmass_hpp */
