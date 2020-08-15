@@ -37,10 +37,12 @@ void Map::initMemberTiles(){
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
             memberTiles[x][y].init(x, y);
+            assignTextures();
         }
     }
 }
 void Map::assignTextures(){
+    //printf("assignTextures #%d ready\n", runCount);
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
             int texIndex = memberTiles[x][y].textureIndex;
@@ -62,6 +64,8 @@ void Map::assignTextures(){
             }
         }
     }
+    //printf("assign textures finished\n");
+    runCount++;
 }
 void Map::loadAllTextures(SDL_Renderer * renderer){
     SDL_Surface * tempSurface1 = IMG_Load("/Users/SFMAdmin/Desktop/Programming/SDL_projects/TopDownScroller/Tiles/Tile_0000_Ocean_Default.png");
@@ -79,7 +83,19 @@ void Map::renderMap(SDL_Renderer *renderer){
     assignTextures();
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
-            SDL_Texture *texture = memberTiles[x][y].currentTexture;
+            SDL_Texture *texture;
+            int index = memberTiles[x][y].textureIndex;
+            switch(index){
+                case 0:{
+                    texture = oceanBase;
+                }
+                case 1:{
+                    texture = grassBase;
+                }
+                case 2:{
+                    texture = desertBase;
+                }
+            }
             SDL_Rect destRect;
             destRect.w = 15;
             destRect.h = 15;
@@ -105,9 +121,11 @@ void Map::sendClick(){
     int clickX = round(_clickX);
     int clickY = round(_clickY);
     memberTiles[clickX][clickY].isClicked();
+    
 }
 
 Tile Map::tileClicked(){
+    assignTextures();
     double _clickX;
     double _clickY;
     int xClickPx;

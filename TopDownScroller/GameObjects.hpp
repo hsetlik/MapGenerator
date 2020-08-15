@@ -46,6 +46,7 @@ public:
     void sendClick();
     Tile tileClicked();
     void printTextures();
+    int runCount = 1;
     void renderMap(SDL_Renderer * renderer);
 };
 

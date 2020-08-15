@@ -74,7 +74,7 @@ void Game::render(){
 }
 
 void Game::update(){
-    
+    workingMap.assignTextures();
 }
 
 void Game::clean()
