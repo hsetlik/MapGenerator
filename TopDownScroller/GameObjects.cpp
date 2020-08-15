@@ -85,13 +85,11 @@ Landmass::Landmass(){
 }
 Landmass::~Landmass(){
 }
-void Landmass::init(int xStart, int yStart, Map chosenMap){
-    xOrigin = xStart;
-    yOrigin = yStart;
-    map = chosenMap;
+void Landmass::init(Map chosenMap){
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
+    printf("Landmass initialized\n");
 }
 void Landmass::updateOptions(int xPos, int yPos){
     int x = xPos;
@@ -109,19 +107,28 @@ void Landmass::updateOptions(int xPos, int yPos){
             if((_optionTiles[n].xPos == xOpt) && (_optionTiles[n].yPos == yOpt)){
                 free = false;
             }
+            for(int i = 0; i < memberCount; i++){
+                if((_landMembers[i].xPos == xOpt)&&(_landMembers[i].yPos == yOpt)){
+                    free = false;
+                }
+            }
         }
         if(free){
             _optionTiles[optionCount] = adjacentTiles[i];
             optionCount++;
         }
     }
+    printf("options updated\n");
 }
-void Landmass::placeFirstTile(int texIndex){
+void Landmass::placeFirstTile(Tile startingTile, int texIndex){
+    xOrigin = startingTile.xPos;
+    yOrigin = startingTile.yPos;
     map.memberTiles[xOrigin][yOrigin].textureIndex = texIndex;
     map.memberTiles[xOrigin][yOrigin].isLand = true;
     _landMembers[memberCount] = map.memberTiles[xOrigin][yOrigin];
     memberCount++;
     updateOptions(xOrigin, yOrigin);
+    printf("first tile placed\n");
 }
 
 int Landmass::adjacentOfType(Tile checkTile, int texIndex){
@@ -187,6 +194,7 @@ int Landmass::grassWeight(Tile checkTile){
     adjacent1 = adjacent1 * 3;
     int adjacent2 = secondOrderOfType(checkTile, 1);
     weight = adjacent1 + adjacent2;
+    weight += rand() % 10;
     return weight;
 }
 
@@ -196,5 +204,35 @@ int Landmass::desertWeight(Tile checkTile){
     adjacent1 = adjacent1 * 3;
     int adjacent2 = secondOrderOfType(checkTile, 2);
     weight = adjacent1 + adjacent2;
+    weight += rand() % 10;
     return weight;
+}
+
+void Landmass::addTile(){
+    int chosenIndex = rand() % optionCount;
+    Tile chosenTile = _optionTiles[chosenIndex];
+    int gWeight = grassWeight(chosenTile);
+    int dWeight = desertWeight(chosenTile);
+    gWeight += rand() % 8;
+    dWeight += rand() % 8;
+    int texChoice;
+    if(dWeight < gWeight){
+        texChoice = 1;
+    } else {
+        texChoice = 2;
+    }
+    chosenTile.isLand = true;
+    _landMembers[memberCount] = chosenTile;
+    chosenTile.textureIndex = texChoice;
+    memberCount++;
+    printf("Tile placed at: [%d][%d]\n", chosenTile.xPos, chosenTile.yPos);
+    updateOptions(chosenTile.xPos, chosenTile.yPos);
+}
+
+void Landmass::createLandmass(Tile firstTile, int firstTex, int numTiles){
+    placeFirstTile(firstTile, firstTex);
+    for(int i = 0; i < numTiles; i++){
+        addTile();
+    }
+    printf("landmass created\n");
 }

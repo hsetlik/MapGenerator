@@ -50,18 +50,17 @@ class Landmass{
 public:
     Landmass();
     ~Landmass();
-    void init(int xStart, int yStart, Map chosenMap);
+    void init(Map chosenMap);
     int xOrigin;
     int yOrigin;
-    Tile mapTiles[80][43];
     Map map;
-    void placeFirstTile(int textureIndex);
+    void placeFirstTile(Tile startingTile, int textureIndex);
     int adjacentOfType(Tile checkTile, int texIndex);
     int secondOrderOfType(Tile checkTile, int texIndex);
-    void calculateWeights();
     int grassWeight(Tile checkTile);
     int desertWeight(Tile checkTile);
-    void populate(Tile startingTile, int numTiles);
+    void addTile();
+    void createLandmass(Tile firstTile, int firstTex, int numTiles);
     void updateOptions(int xPos, int yPos);
     int memberCount;
     int optionCount;
