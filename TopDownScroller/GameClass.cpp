@@ -9,7 +9,7 @@
 #include "GameClass.hpp"
 
 Map workingMap;
-Landmass newLandmass;
+Landmass landmass;
 
 Game::Game() {
     }

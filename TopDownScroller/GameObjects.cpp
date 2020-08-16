@@ -16,17 +16,13 @@ void Tile::init(int xSet, int ySet){
     xPos = xSet;
     yPos = ySet;
     isLand = false;
-    textureIndex = 0;
+    setIndex(0);
 }
-void Tile:: isClicked(){
-    printf("Tile is at: %d, %d\n", xPos, yPos);
-    printf("My texture is: %d\n", textureIndex);
-    if(isLand){
-        printf("I am on land\n");
-    } else {
-        printf("I am in the ocean\n");
-    }
+void Tile::setIndex(int setting){
+    textureIndex = setting;
 }
+
+Tile memberTiles[80][43];
 
 Map::Map(){
 }
@@ -41,10 +37,9 @@ void Map::initMemberTiles(){
         }
     }
 }
-void Map::assignTextures(){
-    //printf("assignTextures #%d ready\n", runCount);
-    for(int x = 0; x < 80; x++){
-        for(int y = 0; y < 43; y++){
+void Map::assignTexture(Tile tile){
+    int x = tile.xPos;
+    int y = tile.yPos;
             int texIndex = memberTiles[x][y].textureIndex;
             switch(texIndex){
                 case 0:{
@@ -54,6 +49,7 @@ void Map::assignTextures(){
                 case 1:{
                     printf("texture 1 assigned at: %d, %d\n", x, y);
                     memberTiles[x][y].currentTexture = grassBase;
+                    printf("grass texture assigned at: %d, %d\n", x, y);
                     break;
                 }
                 case 2:{
@@ -62,11 +58,11 @@ void Map::assignTextures(){
                     break;
                 }
             }
-        }
+    if(texIndex != 0){
+        printf("Texture index is %d at: %d, %d\n", texIndex, x, y);
     }
-    //printf("assign textures finished\n");
-    runCount++;
-}
+        }
+
 void Map::loadAllTextures(SDL_Renderer * renderer){
     SDL_Surface * tempSurface1 = IMG_Load("/Users/SFMAdmin/Desktop/Programming/SDL_projects/TopDownScroller/Tiles/Tile_0000_Ocean_Default.png");
     oceanBase = SDL_CreateTextureFromSurface(renderer, tempSurface1);
@@ -80,22 +76,11 @@ void Map::loadAllTextures(SDL_Renderer * renderer){
 }
 
 void Map::renderMap(SDL_Renderer *renderer){
-    assignTextures();
+    //printf("renderMap Started\n");
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
-            SDL_Texture *texture;
-            int index = memberTiles[x][y].textureIndex;
-            switch(index){
-                case 0:{
-                    texture = oceanBase;
-                }
-                case 1:{
-                    texture = grassBase;
-                }
-                case 2:{
-                    texture = desertBase;
-                }
-            }
+            assignTexture(memberTiles[x][y]);
+            SDL_Texture *texture = memberTiles[x][y].currentTexture;
             SDL_Rect destRect;
             destRect.w = 15;
             destRect.h = 15;
@@ -103,7 +88,7 @@ void Map::renderMap(SDL_Renderer *renderer){
             destRect.y = 15 * y;
             SDL_RenderCopy(renderer, texture, NULL, &destRect);
             if(memberTiles[x][y].textureIndex != 0){
-                printf("Nonzero texture at: %d, %d.  Texture ID is: %d\n", x, y, memberTiles[x][y].textureIndex);
+                printf("Nonzero texture %d rendered at: %d, %d", memberTiles[x][y].textureIndex, x, y);
             }
             
         }
@@ -155,7 +140,9 @@ Landmass::Landmass(){
 }
 Landmass::~Landmass(){
 }
-void Landmass::init(Map chosenMap){
+void Landmass::init(int xStart, int yStart, Map chosenMap){
+    xOrigin = xStart;
+    yOrigin = yStart;
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
@@ -166,10 +153,10 @@ void Landmass::updateOptions(int xPos, int yPos){
     int x = xPos;
     int y = yPos;
     Tile adjacentTiles[4];
-    adjacentTiles[0] = map.memberTiles[x][y - 1]; //top
-    adjacentTiles[1] = map.memberTiles[x + 1][y]; //right
-    adjacentTiles[2] = map.memberTiles[x][y + 1]; //bottom
-    adjacentTiles[3] = map.memberTiles[x - 1][y]; //left
+    adjacentTiles[0] = memberTiles[x][y - 1]; //top
+    adjacentTiles[1] = memberTiles[x + 1][y]; //right
+    adjacentTiles[2] = memberTiles[x][y + 1]; //bottom
+    adjacentTiles[3] = memberTiles[x - 1][y]; //left
     for(int i = 0; i < 4; i++){
         int xOpt = adjacentTiles[i].xPos;
         int yOpt = adjacentTiles[i].yPos;
@@ -209,10 +196,10 @@ int Landmass::adjacentOfType(Tile checkTile, int texIndex){
     int texture = texIndex;
     int typeCounter = 0;
     Tile adjacentTiles[4];
-    adjacentTiles[0] = map.memberTiles[x][y - 1]; //top
-    adjacentTiles[1] = map.memberTiles[x + 1][y]; //right
-    adjacentTiles[2] = map.memberTiles[x][y + 1]; //bottom
-    adjacentTiles[3] = map.memberTiles[x - 1][y]; //left
+    adjacentTiles[0] = memberTiles[x][y - 1]; //top
+    adjacentTiles[1] = memberTiles[x + 1][y]; //right
+    adjacentTiles[2] = memberTiles[x][y + 1]; //bottom
+    adjacentTiles[3] = memberTiles[x - 1][y]; //left
     for(int i = 0; i < 4; i++){
         if(adjacentTiles[i].textureIndex == texture){
             typeCounter++;
@@ -225,31 +212,31 @@ int Landmass::secondOrderOfType(Tile checkTile, int texIndex){
     int x = checkTile.xPos;
     int y = checkTile.yPos;
     Tile adjacentTiles[4];
-    adjacentTiles[0] = map.memberTiles[x][y - 1]; //top
-    adjacentTiles[1] = map.memberTiles[x + 1][y]; //right
-    adjacentTiles[2] = map.memberTiles[x][y + 1]; //bottom
-    adjacentTiles[3] = map.memberTiles[x - 1][y]; //left
+    adjacentTiles[0] = memberTiles[x][y - 1]; //top
+    adjacentTiles[1] = memberTiles[x + 1][y]; //right
+    adjacentTiles[2] = memberTiles[x][y + 1]; //bottom
+    adjacentTiles[3] = memberTiles[x - 1][y]; //left
     Tile secondOrderAdjacents[12];
     int xA = adjacentTiles[0].xPos;
     int yA = adjacentTiles[0].yPos;
-    secondOrderAdjacents[0] = map.memberTiles[xA][yA -1]; //top.top
-    secondOrderAdjacents[1] = map.memberTiles[xA + 1][yA]; //top.right
-    secondOrderAdjacents[2] = map.memberTiles[xA - 1][yA]; //top.left
+    secondOrderAdjacents[0] = memberTiles[xA][yA -1]; //top.top
+    secondOrderAdjacents[1] = memberTiles[xA + 1][yA]; //top.right
+    secondOrderAdjacents[2] = memberTiles[xA - 1][yA]; //top.left
     int xB = adjacentTiles[1].xPos;
     int yB = adjacentTiles[1].yPos;
-    secondOrderAdjacents[3] = map.memberTiles[xB][yB -1]; //right.top
-    secondOrderAdjacents[4] = map.memberTiles[xB + 1][yB];// right.right
-    secondOrderAdjacents[5] = map.memberTiles[xB][yB + 1]; //right.bottom
+    secondOrderAdjacents[3] = memberTiles[xB][yB -1]; //right.top
+    secondOrderAdjacents[4] = memberTiles[xB + 1][yB];// right.right
+    secondOrderAdjacents[5] = memberTiles[xB][yB + 1]; //right.bottom
     int xC = adjacentTiles[2].xPos;
     int yC = adjacentTiles[2].yPos;
-    secondOrderAdjacents[6] = map.memberTiles[xC + 1][yC];//bottom.right
-    secondOrderAdjacents[7] = map.memberTiles[xC][yC + 1]; //bottom.bottom
-    secondOrderAdjacents[8] = map.memberTiles[xC -1][yC];
+    secondOrderAdjacents[6] = memberTiles[xC + 1][yC];//bottom.right
+    secondOrderAdjacents[7] = memberTiles[xC][yC + 1]; //bottom.bottom
+    secondOrderAdjacents[8] = memberTiles[xC -1][yC];
     int xD = adjacentTiles[3].xPos;
     int yD = adjacentTiles[3].yPos;
-    secondOrderAdjacents[9] = map.memberTiles[xD][yD -1];//left top
-    secondOrderAdjacents[10] = map.memberTiles[xD][yD + 1];//left bottom
-    secondOrderAdjacents[11] = map.memberTiles[xD - 1][yD];//left left
+    secondOrderAdjacents[9] = memberTiles[xD][yD -1];//left top
+    secondOrderAdjacents[10] = memberTiles[xD][yD + 1];//left bottom
+    secondOrderAdjacents[11] = memberTiles[xD - 1][yD];//left left
     int count = 0;
     for(int i = 0; i < 12; i++){
         if(secondOrderAdjacents[i].textureIndex == texIndex)

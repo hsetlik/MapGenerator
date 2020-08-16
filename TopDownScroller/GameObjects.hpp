@@ -24,6 +24,7 @@ public:
     SDL_Texture * currentTexture;
     int xPos;
     int yPos;
+    void setIndex(int index);
     void isClicked();
 private:
     int _grassWeight;
@@ -39,9 +40,9 @@ public:
     SDL_Texture * oceanBase;
     SDL_Texture * grassBase;
     SDL_Texture * desertBase;
-    Tile memberTiles[80][43];
     void loadAllTextures(SDL_Renderer* renderer);
-    void assignTextures();
+    void assignTexture(Tile tile);
+    void assignAllTextures();
     void initMemberTiles();
     void sendClick();
     Tile tileClicked();
@@ -59,7 +60,8 @@ public:
     int xOrigin;
     int yOrigin;
     Map map;
-    void placeFirstTile(Tile startingTile, int textureIndex);
+    void testGraphic();
+    void placeFirstTile(int textureIndex);
     int adjacentOfType(Tile checkTile, int texIndex);
     int secondOrderOfType(Tile checkTile, int texIndex);
     int grassWeight(Tile checkTile);
