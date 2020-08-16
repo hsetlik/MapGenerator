@@ -39,7 +39,6 @@ public:
     SDL_Texture * oceanBase;
     SDL_Texture * grassBase;
     SDL_Texture * desertBase;
-    Tile memberTiles[80][43];
     void loadAllTextures(SDL_Renderer* renderer);
     void assignTexture(Tile tile);
     void assignAllTextures();
