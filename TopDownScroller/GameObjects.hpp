@@ -24,6 +24,7 @@ public:
     SDL_Texture * currentTexture;
     int xPos;
     int yPos;
+    void setIndex(int index);
 private:
     int _grassWeight;
     int _desertWeight;
@@ -40,7 +41,8 @@ public:
     SDL_Texture * desertBase;
     Tile memberTiles[80][43];
     void loadAllTextures(SDL_Renderer* renderer);
-    void assignTextures();
+    void assignTexture(Tile tile);
+    void assignAllTextures();
     void initMemberTiles();
     void renderMap(SDL_Renderer * renderer);
 };
@@ -55,6 +57,7 @@ public:
     int yOrigin;
     Tile mapTiles[80][43];
     Map map;
+    void testGraphic();
     void placeFirstTile(int textureIndex);
     int adjacentOfType(Tile checkTile, int texIndex);
     int secondOrderOfType(Tile checkTile, int texIndex);

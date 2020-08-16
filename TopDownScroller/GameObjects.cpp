@@ -16,9 +16,11 @@ void Tile::init(int xSet, int ySet){
     xPos = xSet;
     yPos = ySet;
     isLand = false;
-    textureIndex = 0;
+    setIndex(0);
 }
-
+void Tile::setIndex(int setting){
+    textureIndex = setting;
+}
 
 Map::Map(){
 }
@@ -32,9 +34,9 @@ void Map::initMemberTiles(){
         }
     }
 }
-void Map::assignTextures(){
-    for(int x = 0; x < 80; x++){
-        for(int y = 0; y < 43; y++){
+void Map::assignTexture(Tile tile){
+    int x = tile.xPos;
+    int y = tile.yPos;
             int texIndex = memberTiles[x][y].textureIndex;
             switch(texIndex){
                 case 0:{
@@ -42,17 +44,24 @@ void Map::assignTextures(){
                     break;
                 }
                 case 1:{
+                    memberTiles[x][y].isLand = true;
+                    memberTiles[x][y].textureIndex = 1;
                     memberTiles[x][y].currentTexture = grassBase;
+                    printf("grass texture assigned at: %d, %d\n", x, y);
                     break;
                 }
                 case 2:{
+                    memberTiles[x][y].isLand = true;
+                    memberTiles[x][y].textureIndex = 2;
                     memberTiles[x][y].currentTexture = desertBase;
                     break;
                 }
             }
-        }
+    if(texIndex != 0){
+        printf("Texture index is %d at: %d, %d\n", texIndex, x, y);
     }
-}
+        }
+
 void Map::loadAllTextures(SDL_Renderer * renderer){
     SDL_Surface * tempSurface1 = IMG_Load("/Users/SFMAdmin/Desktop/Programming/SDL_projects/TopDownScroller/Tiles/Tile_0000_Ocean_Default.png");
     oceanBase = SDL_CreateTextureFromSurface(renderer, tempSurface1);
@@ -66,16 +75,20 @@ void Map::loadAllTextures(SDL_Renderer * renderer){
 }
 
 void Map::renderMap(SDL_Renderer *renderer){
-    assignTextures();
+    //printf("renderMap Started\n");
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
-            static SDL_Texture *texture = memberTiles[x][y].currentTexture;
+            assignTexture(memberTiles[x][y]);
+            SDL_Texture *texture = memberTiles[x][y].currentTexture;
             SDL_Rect destRect;
             destRect.w = 15;
             destRect.h = 15;
             destRect.x = 15 * x;
             destRect.y = 15 * y;
             SDL_RenderCopy(renderer, texture, NULL, &destRect);
+            if(memberTiles[x][y].textureIndex != 0){
+                printf("Nonzero texture %d rendered at: %d, %d", memberTiles[x][y].textureIndex, x, y);
+            }
             
         }
     }
@@ -88,7 +101,6 @@ Landmass::~Landmass(){
 void Landmass::init(int xStart, int yStart, Map chosenMap){
     xOrigin = xStart;
     yOrigin = yStart;
-    map = chosenMap;
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
@@ -117,7 +129,7 @@ void Landmass::updateOptions(int xPos, int yPos){
     }
 }
 void Landmass::placeFirstTile(int texIndex){
-    map.memberTiles[xOrigin][yOrigin].textureIndex = texIndex;
+    map.memberTiles[xOrigin][yOrigin].setIndex(texIndex);
     map.memberTiles[xOrigin][yOrigin].isLand = true;
     _landMembers[memberCount] = map.memberTiles[xOrigin][yOrigin];
     memberCount++;
@@ -197,4 +209,16 @@ int Landmass::desertWeight(Tile checkTile){
     int adjacent2 = secondOrderOfType(checkTile, 2);
     weight = adjacent1 + adjacent2;
     return weight;
+}
+
+void Landmass::testGraphic(){
+    for(int i = 0; i < 20; i++){
+        int randX = rand() % 80;
+        int randY = rand() % 43;
+        map.memberTiles[randX][randY].setIndex(1);
+        int lastIndex = map.memberTiles[randX][randY].textureIndex;
+        printf("Texture %d placed at: %d, %d\n", lastIndex, randX, randY);
+        map.assignTexture(map.memberTiles[randX][randY]);
+    }
+    printf("Graphics test calculated\n");
 }

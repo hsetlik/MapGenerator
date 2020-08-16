@@ -9,6 +9,7 @@
 #include "GameClass.hpp"
 
 Map workingMap;
+Landmass landmass;
 
 Game::Game() {
     }
@@ -39,7 +40,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     }
     workingMap.initMemberTiles();
     workingMap.loadAllTextures(renderer);
-    //Load Images here
+    landmass.init(40, 20, workingMap);
 }
 
 void Game::handleEvents()
@@ -51,6 +52,7 @@ void Game::handleEvents()
             isRunning = false;
             break;
         case SDL_MOUSEBUTTONDOWN:
+            landmass.testGraphic();
             //do stuff when the mouse is clicked
             break;
         // check for more events with more case statements here
