@@ -66,6 +66,7 @@ public:
     int secondOrderOfType(Tile checkTile, int texIndex);
     int grassWeight(Tile checkTile);
     int desertWeight(Tile checkTile);
+    void calculateFavor(Tile checkTile);
     void addTile();
     void createLandmass(Tile firstTile, int firstTex, int numTiles);
     void updateOptions(int xPos, int yPos);
@@ -74,7 +75,8 @@ public:
     bool created;
 private:
     Tile _landMembers[128];
-    Tile _optionTiles[256];
+    Tile _optionTiles[1000];
+    int _tileFavor[80][43];
 };
 
 #endif /* GameObjects_hpp */

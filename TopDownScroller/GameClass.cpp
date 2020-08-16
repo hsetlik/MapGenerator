@@ -55,17 +55,11 @@ void Game::handleEvents()
             Tile clickedTile = workingMap.tileClicked();
             clickedTile.isClicked();
             workingMap.printTextures();
-            if(landmass.created == false){
-                landmass.createLandmass(clickedTile, 1, 30);
-            }
-            //do stuff when the mouse is clicked
-            break;
-        }
-        // check for more events with more case statements here
-        default:
-            break;
+            landmass.createLandmass(clickedTile, 1, 45);
+    }
     }
 }
+
 
 void Game::render(){
     SDL_RenderClear(renderer);

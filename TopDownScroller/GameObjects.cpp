@@ -90,7 +90,7 @@ void Map::renderMap(SDL_Renderer *renderer){
             destRect.y = 15 * y;
             SDL_RenderCopy(renderer, texture, NULL, &destRect);
             if(memberTiles[x][y].textureIndex != 0){
-                printf("Nonzero texture %d rendered at: %d, %d", memberTiles[x][y].textureIndex, x, y);
+                printf("Nonzero texture %d rendered at: %d, %d\n", memberTiles[x][y].textureIndex, x, y);
             }
             
         }
@@ -202,6 +202,7 @@ int Landmass::adjacentOfType(Tile checkTile, int texIndex){
     for(int i = 0; i < 4; i++){
         if(adjacentTiles[i].textureIndex == texture){
             typeCounter++;
+            _tileFavor[x][y] += 5;
         }
     }
     return typeCounter;
@@ -241,6 +242,7 @@ int Landmass::secondOrderOfType(Tile checkTile, int texIndex){
         if(secondOrderAdjacents[i].textureIndex == texIndex)
         {
             count++;
+            _tileFavor[checkTile.xPos][checkTile.yPos] += 2;
         }
     }
     return count;
