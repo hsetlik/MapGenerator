@@ -26,6 +26,7 @@ public:
     int yPos;
     void setIndex(int index);
     void isClicked();
+    int landWeight;
 private:
     int _grassWeight;
     int _desertWeight;
@@ -66,16 +67,19 @@ public:
     int secondOrderOfType(Tile checkTile, int texIndex);
     int grassWeight(Tile checkTile);
     int desertWeight(Tile checkTile);
-    void calculateFavor(Tile checkTile);
+    void calculateLandWeight(Tile checkTile);
     void addTile();
+    void addWeights();
     void createLandmass(Tile firstTile, int firstTex, int numTiles);
     void updateOptions(int xPos, int yPos);
     int memberCount;
     int optionCount;
+    int randomIndex(int weightSum);
     bool created;
+    int landWeightSum;
 private:
-    Tile _landMembers[128];
-    Tile _optionTiles[1000];
+    Tile _landMembers[3440];
+    Tile _optionTiles[3440];
     int _tileFavor[80][43];
 };
 
