@@ -61,7 +61,7 @@ public:
     int yOrigin;
     Map map;
     void testGraphic();
-    void placeFirstTile(int textureIndex);
+    void placeFirstTile(Tile tileChoice, int textureIndex);
     int adjacentOfType(Tile checkTile, int texIndex);
     int secondOrderOfType(Tile checkTile, int texIndex);
     int grassWeight(Tile checkTile);

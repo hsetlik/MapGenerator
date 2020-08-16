@@ -22,6 +22,9 @@ void Tile::setIndex(int setting){
     textureIndex = setting;
 }
 
+void Tile::isClicked(){
+    printf("Tile clicked at: %d, %d\n", xPos, yPos);
+}
 Tile memberTiles[80][43];
 
 Map::Map(){
@@ -33,7 +36,6 @@ void Map::initMemberTiles(){
     for(int x = 0; x < 80; x++){
         for(int y = 0; y < 43; y++){
             memberTiles[x][y].init(x, y);
-            assignTextures();
         }
     }
 }
@@ -110,7 +112,7 @@ void Map::sendClick(){
 }
 
 Tile Map::tileClicked(){
-    assignTextures();
+    //assignTextures();
     double _clickX;
     double _clickY;
     int xClickPx;
@@ -140,9 +142,7 @@ Landmass::Landmass(){
 }
 Landmass::~Landmass(){
 }
-void Landmass::init(int xStart, int yStart, Map chosenMap){
-    xOrigin = xStart;
-    yOrigin = yStart;
+void Landmass::init(Map chosenMap){
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
@@ -178,16 +178,15 @@ void Landmass::updateOptions(int xPos, int yPos){
     }
     printf("options updated\n");
 }
-void Landmass::placeFirstTile(Tile startingTile, int texIndex){
-    xOrigin = startingTile.xPos;
-    yOrigin = startingTile.yPos;
-    map.memberTiles[xOrigin][yOrigin].textureIndex = texIndex;
-    map.memberTiles[xOrigin][yOrigin].isLand = true;
-    _landMembers[memberCount] = map.memberTiles[xOrigin][yOrigin];
+void Landmass::placeFirstTile(Tile tileChoice, int texIndex){
+    int xOrigin = tileChoice.xPos;
+    int yOrigin = tileChoice.yPos;
+    memberTiles[xOrigin][yOrigin].textureIndex = texIndex;
+    memberTiles[xOrigin][yOrigin].isLand = true;
+    _landMembers[memberCount] = memberTiles[xOrigin][yOrigin];
     memberCount++;
     updateOptions(xOrigin, yOrigin);
     printf("first tile placed\n");
-    map.assignTextures();
 }
 
 int Landmass::adjacentOfType(Tile checkTile, int texIndex){
@@ -287,14 +286,13 @@ void Landmass::addTile(){
     chosenTile.isLand = true;
     _landMembers[memberCount] = chosenTile;
     chosenTile.textureIndex = texChoice;
-    map.memberTiles[cX][cY].textureIndex = texChoice;
+    memberTiles[cX][cY].textureIndex = texChoice;
     memberCount++;
     printf("Tile placed at: [%d][%d]\n", chosenTile.xPos, chosenTile.yPos);
     printf("Texture index: %d\n", chosenTile.textureIndex);
-    printf("Map texture index: %d\n", map.memberTiles[cX][cY].textureIndex);
+    printf("Map texture index: %d\n", memberTiles[cX][cY].textureIndex);
     updateOptions(chosenTile.xPos, chosenTile.yPos);
-    map.assignTextures();
-    printf("Assigned Map texture index: %d\n", map.memberTiles[cX][cY].textureIndex);
+    printf("Assigned Map texture index: %d\n", memberTiles[cX][cY].textureIndex);
 }
 
 void Landmass::createLandmass(Tile firstTile, int firstTex, int numTiles){

@@ -40,7 +40,7 @@ void Game::init(const char *title, int xpos, int ypos, int width, int height, bo
     }
     workingMap.initMemberTiles();
     workingMap.loadAllTextures(renderer);
-    newLandmass.init(workingMap);
+    landmass.init(workingMap);
 }
 
 void Game::handleEvents()
@@ -55,8 +55,8 @@ void Game::handleEvents()
             Tile clickedTile = workingMap.tileClicked();
             clickedTile.isClicked();
             workingMap.printTextures();
-            if(newLandmass.created == false){
-                newLandmass.createLandmass(clickedTile, 1, 30);
+            if(landmass.created == false){
+                landmass.createLandmass(clickedTile, 1, 30);
             }
             //do stuff when the mouse is clicked
             break;
@@ -74,7 +74,6 @@ void Game::render(){
 }
 
 void Game::update(){
-    workingMap.assignTextures();
 }
 
 void Game::clean()
