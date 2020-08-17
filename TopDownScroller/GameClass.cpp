@@ -54,8 +54,11 @@ void Game::handleEvents()
         case SDL_MOUSEBUTTONDOWN:{
             Tile clickedTile = workingMap.tileClicked();
             clickedTile.isClicked();
+            int xClick = clickedTile.xPos;
+            int yClick = clickedTile.yPos;
+            landmass.build(xClick, yClick, 1, 10);
+            
             //workingMap.printTextures();
-            landmass.createLandmass(clickedTile, 1, 45);
     }
     }
 }

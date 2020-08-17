@@ -68,13 +68,16 @@ public:
     Tile* adjacentTiles(Tile tile);
     Tile* withinThree(Tile tile);
     int numNeighbors(Tile tile);
+    int randomOpenIndex();
     void updateLandWeight(Tile tile);
     void addOptionsFrom(Tile tile);
     void addMember(int xPos, int yPos, int texIndex);
-    
+    void build(int xOrigin, int yOrigin, int texStart, int size);
+    bool firstTile;
 private:
     Tile _landMembers[3440];
     Tile _optionTiles[3440];
+    int _tileFavor[80][43];
 };
 
 #endif /* GameObjects_hpp */

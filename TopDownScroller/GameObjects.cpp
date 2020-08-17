@@ -146,6 +146,7 @@ void Landmass::init(Map chosenMap){
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
+    firstTile = true;
     printf("Landmass initialized\n");
 }
 
@@ -170,25 +171,34 @@ int Landmass::yInLimits(int yIn){
 
 
 Tile* Landmass::adjacentTiles(Tile tile){
+    printf("adjacent tiles started\n");
     Tile adjacents[4];
     int x = tile.xPos;
+    printf("x = %d\n", x);
     int y = tile.yPos;
-    if(y > 0){
-    adjacents[0] = memberTiles[x][y - 1];//top
+    printf("y = %d\n", y);
+    if(y != 0){
+        adjacents[0] = memberTiles[x][y - 1];//top
         tile.numAdjacent++;
+        printf("top tile added\n");
     }
     if(x < 79){
     adjacents[1] = memberTiles[x + 1][y];//left
         tile.numAdjacent++;
+        printf("left tile added\n");
     }
     if(y < 43){
     adjacents[2] = memberTiles[x][y + 1];//bottom
         tile.numAdjacent++;
+        printf("bottom tile added\n");
     }
-    if(x > 0){
-    adjacents[3] = memberTiles[x - 1][y];//right
+    if(x != 0){
+        adjacents[3] = memberTiles[x - 1][y];//right
         tile.numAdjacent++;
+        printf("right tile added\n");
     }
+    printf("number of adajcent: %d\n", tile.numAdjacent);
+    printf("adjacentTiles finished\n");
     return adjacents;
 }
 
@@ -243,12 +253,14 @@ Tile* Landmass::withinThree(Tile tile){
 }
 
 int Landmass::numNeighbors(Tile tile){
+    printf("numNeighbors started\n");
     Tile* pTiles = adjacentTiles(tile);
     Tile tiles[4];
     int maxNumber = tile.numAdjacent;
     int neighborCount = 0;
     for(int i = 0; i < maxNumber; i++){
         tiles[i] = pTiles[i];
+        printf("pointer to tile at: %d, %d\n", pTiles[i].xPos, pTiles[i].yPos);
         int x = tiles[i].xPos;
         int y = tiles[i].xPos;
         if(memberTiles[x][y].isLand){
@@ -279,7 +291,9 @@ void Landmass::addOptionsFrom(Tile tile){
         }
         if(valid){
             _optionTiles[optionCount] = tiles[i];
-            updateLandWeight(_optionTiles[optionCount]);
+            int x = _optionTiles[optionCount].xPos;
+            int y = _optionTiles[optionCount].yPos;
+            updateLandWeight(memberTiles[x][y]);
             optionCount++;
         }
     }
@@ -313,4 +327,50 @@ void Landmass::addMember(int xPos, int yPos, int texIndex){
     memberTiles[xPos][yPos].setIndex(texIndex);
     memberTiles[xPos][yPos].isLand = true;
     addOptionsFrom(memberTiles[xPos][yPos]);
+}
+
+int Landmass::randomOpenIndex(){
+    printf("rOI started\n");
+    int landWeightSum = 0;
+    printf("option count: %d\n", optionCount);
+    for(int i = 0; i < optionCount; i++){
+        int x = _optionTiles[i].xPos;
+        int y = _optionTiles[i].yPos;
+        int weight = memberTiles[x][y].landWeight;
+        landWeightSum += weight;
+    }
+    printf("landWeightSum: %d\n", landWeightSum);
+    for(int i = 0; i < optionCount; i++){
+        printf("current options: %d\n", optionCount);
+        int random = rand() % landWeightSum;
+        printf("Current random: %d\n", random);
+        int x = _optionTiles[i].xPos;
+        int y = _optionTiles[i].yPos;
+        int weight = memberTiles[x][y].landWeight;
+        bool land = memberTiles[x][y].isLand;
+        if(random < weight && land == false){
+            return i;
+        } else {
+            random -= weight;
+            srand(random + weight);
+        }
+    }
+    return 0;
+}
+void Landmass::build(int xOrigin, int yOrigin, int texStart, int size){
+    addMember(xOrigin, yOrigin, texStart);
+    printf("options in build loop: %d\n", optionCount);
+    Tile firstTile = memberTiles[xOrigin][yOrigin];
+    printf("landmass started at: %d, %d\n", firstTile.xPos, firstTile.yPos);
+    int toFill = size - 1;
+    for(int i = 0; i < toFill; i++){
+        int index = randomOpenIndex();
+        printf("Chosen index: %d\n", index);
+        int x = _optionTiles[index].xPos;
+        int y = _optionTiles[index].yPos;
+        addMember(x, y, texStart);
+    }
+    printf("landmass built\n");
+    
+    
 }
