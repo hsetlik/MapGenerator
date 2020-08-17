@@ -70,10 +70,11 @@ public:
     int numNeighbors(Tile tile);
     int randomOpenIndex();
     void updateLandWeight(Tile tile);
+    void updateAllLandWeights();
     void addOptionsFrom(Tile tile);
     void addMember(int xPos, int yPos, int texIndex);
     void build(int xOrigin, int yOrigin, int texStart, int size);
-    bool firstTile;
+    bool firstRound;
 private:
     Tile _landMembers[3440];
     Tile _optionTiles[3440];
