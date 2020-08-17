@@ -24,6 +24,8 @@ public:
     SDL_Texture * currentTexture;
     int xPos;
     int yPos;
+    int numAdjacent;
+    int numWithinThree;
     void setIndex(int index);
     void isClicked();
     int landWeight;
@@ -58,29 +60,21 @@ public:
     Landmass();
     ~Landmass();
     void init(Map chosenMap);
-    int xOrigin;
-    int yOrigin;
     Map map;
-    void testGraphic();
-    void placeFirstTile(Tile tileChoice, int textureIndex);
-    int adjacentOfType(Tile checkTile, int texIndex);
-    int secondOrderOfType(Tile checkTile, int texIndex);
-    int grassWeight(Tile checkTile);
-    int desertWeight(Tile checkTile);
-    void calculateLandWeight(Tile checkTile);
-    void addTile();
-    void addWeights();
-    void createLandmass(Tile firstTile, int firstTex, int numTiles);
-    void updateOptions(int xPos, int yPos);
-    int memberCount;
     int optionCount;
-    int randomIndex(int weightSum);
-    bool created;
-    int landWeightSum;
+    int memberCount;
+    int xInLimits(int xIn);
+    int yInLimits(int yIn);
+    Tile* adjacentTiles(Tile tile);
+    Tile* withinThree(Tile tile);
+    int numNeighbors(Tile tile);
+    void updateLandWeight(Tile tile);
+    void addOptionsFrom(Tile tile);
+    void addMember(int xPos, int yPos, int texIndex);
+    
 private:
     Tile _landMembers[3440];
     Tile _optionTiles[3440];
-    int _tileFavor[80][43];
 };
 
 #endif /* GameObjects_hpp */

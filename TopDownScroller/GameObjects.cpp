@@ -17,6 +17,8 @@ void Tile::init(int xSet, int ySet){
     yPos = ySet;
     isLand = false;
     landWeight = 3;
+    numAdjacent = 0;
+    numWithinThree = 0;
     setIndex(0);
 }
 void Tile::setIndex(int setting){
@@ -144,260 +146,171 @@ void Landmass::init(Map chosenMap){
     map = chosenMap;
     memberCount = 0;
     optionCount = 0;
-    created = false;
     printf("Landmass initialized\n");
 }
 
-int limitToZero(int input){
-    if(input < 1){
-        return 0;
-    } else {
-        return input;
-    }
-}
-
-int xTopLimit(int input)
-{
-    if(input > 78){
+int Landmass::xInLimits(int xIn){
+    if(xIn < 78){
         return 79;
-    } else {
-        return input;
+    } else if(xIn < 1){
+        return 0;
+    } else{
+        return xIn;
     }
 }
-
-int yTopLimit(int input)
-{
-    if(input > 41){
+int Landmass::yInLimits(int yIn){
+    if(yIn < 41){
         return 42;
+    } else if(yIn < 1){
+        return 0;
+    } else{
+        return yIn;
+    }
+}
+
+
+Tile* Landmass::adjacentTiles(Tile tile){
+    Tile adjacents[4];
+    int x = tile.xPos;
+    int y = tile.yPos;
+    if(y > 0){
+    adjacents[0] = memberTiles[x][y - 1];//top
+        tile.numAdjacent++;
+    }
+    if(x < 79){
+    adjacents[1] = memberTiles[x + 1][y];//left
+        tile.numAdjacent++;
+    }
+    if(y < 43){
+    adjacents[2] = memberTiles[x][y + 1];//bottom
+        tile.numAdjacent++;
+    }
+    if(x > 0){
+    adjacents[3] = memberTiles[x - 1][y];//right
+        tile.numAdjacent++;
+    }
+    return adjacents;
+}
+
+bool yInRange(int input){
+    if(input < 0 || input > 42 ){
+        return false;
     } else {
-        return input;
+        return true;
     }
 }
-void Landmass::updateOptions(int xPos, int yPos){
-    int x = xPos;
-    int y = yPos;
-    int xUp = xTopLimit(x + 1);
-    int xDown = limitToZero(x - 1);
-    int yUp = yTopLimit(y + 1);
-    int yDown = limitToZero(y - 1);
-    Tile adjacentTiles[4];
-    adjacentTiles[0] = memberTiles[x][yDown]; //top
-    adjacentTiles[1] = memberTiles[xUp][y]; //right
-    adjacentTiles[2] = memberTiles[x][yUp]; //bottom
-    adjacentTiles[3] = memberTiles[xDown][y]; //left
-    for(int i = 0; i < 4; i++){
-        int xOpt = adjacentTiles[i].xPos;
-        int yOpt = adjacentTiles[i].yPos;
-        bool free = true;
+
+bool xInRange(int input){
+    if(input < 0 || input > 79){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+Tile* Landmass::withinThree(Tile tile){
+    Tile* pNeighbors = adjacentTiles(tile);
+    Tile neighbors[4];
+    int maxNeighbors = tile.numAdjacent;
+    for(int i = 0; i < maxNeighbors; i++){
+        neighbors[i] = pNeighbors[i];
+    }
+    //4 in second order, 15 in third
+    Tile inRange[20];
+    int assignedInRange = 0;
+    for(int i = 0; i < maxNeighbors; i++){
+        Tile* pIterNeighbors = adjacentTiles(neighbors[i]);
+        Tile iterNeighbors[4];
+        int iterMax = neighbors[i].numAdjacent;
+        for(int n = 0; n < iterMax; n++){
+            iterNeighbors[i] = pIterNeighbors[i];
+            int x = iterNeighbors[i].xPos;
+            int y = iterNeighbors[i].yPos;
+            if((yInRange(y))&&(xInRange(x))){
+            if(assignedInRange == 0){
+                inRange[0] = memberTiles[x][y];
+                assignedInRange++;
+                tile.numWithinThree++;
+            } else{
+                inRange[assignedInRange] = memberTiles[x][y];
+                assignedInRange++;
+                tile.numWithinThree++;
+            }
+            }}
+    }
+    return inRange;
+}
+
+int Landmass::numNeighbors(Tile tile){
+    Tile* pTiles = adjacentTiles(tile);
+    Tile tiles[4];
+    int maxNumber = tile.numAdjacent;
+    int neighborCount = 0;
+    for(int i = 0; i < maxNumber; i++){
+        tiles[i] = pTiles[i];
+        int x = tiles[i].xPos;
+        int y = tiles[i].xPos;
+        if(memberTiles[x][y].isLand){
+            neighborCount++;
+        }
+    }
+    return neighborCount;
+}
+
+void Landmass::addOptionsFrom(Tile tile){
+    Tile* pTiles = adjacentTiles(tile);
+    Tile tiles[4];
+    int maxNumber = tile.numAdjacent;
+    for(int i = 0; i < maxNumber; i++){
+        bool valid = true;
+        tiles[i] = pTiles[i];
+        int x = tiles[i].xPos;
+        int y = tiles[i].yPos;
+        if(memberTiles[x][y].isLand){
+            valid = false;
+        }
         for(int n = 0; n < optionCount; n++){
-            if((_optionTiles[n].xPos == xOpt) && (_optionTiles[n].yPos == yOpt)){
-                free = false;
+            int optX = _optionTiles[n].xPos;
+            int optY = _optionTiles[n].yPos;
+            if((optX ==x)&&(optY == y)){
+                valid = false;
             }
         }
-        for(int i = 0; i < memberCount; i++){
-            if((_landMembers[i].xPos == xOpt)&&(_landMembers[i].yPos == yOpt)){
-                free = false;
-            }
-        }
-        if(free){
-            int newX = adjacentTiles[i].xPos;
-            int newY = adjacentTiles[i].yPos;
-            _optionTiles[optionCount] = memberTiles[newX][newY];
-            int set1 = adjacentOfType(_optionTiles[optionCount], 1);
-            set1 += adjacentOfType(_optionTiles[optionCount], 2);
-            int set2 = secondOrderOfType(_optionTiles[optionCount], 1);
-            set2 += secondOrderOfType(_optionTiles[optionCount], 2);
-            int weighted1 = set1 * 8;
-            int weighted2 = set2 * 3;
-            _optionTiles[optionCount].landWeight =  weighted1 + weighted2;
+        if(valid){
+            _optionTiles[optionCount] = tiles[i];
+            updateLandWeight(_optionTiles[optionCount]);
             optionCount++;
-           
         }
     }
-    printf("options updated\n");
-}
-void Landmass::placeFirstTile(Tile tileChoice, int texIndex){
-    int xOrigin = tileChoice.xPos;
-    int yOrigin = tileChoice.yPos;
-    memberTiles[xOrigin][yOrigin].textureIndex = texIndex;
-    memberTiles[xOrigin][yOrigin].isLand = true;
-    _landMembers[memberCount] = memberTiles[xOrigin][yOrigin];
-    updateOptions(xOrigin, yOrigin);
-    printf("first tile placed\n");
 }
 
-int Landmass::adjacentOfType(Tile checkTile, int texIndex){
-    int x = checkTile.xPos;
-    int y = checkTile.yPos;
-    int xUp = limitToZero(x + 1);
-    int xDown = limitToZero(x - 1);
-    int yUp = limitToZero(y + 1);
-    int yDown = limitToZero(y - 1);
-    int texture = texIndex;
-    int typeCounter = 0;
+void Landmass::updateLandWeight(Tile tile){
+    int adjConstant = 8;
+    Tile* pTileA = adjacentTiles(tile);
     Tile adjacentTiles[4];
-    adjacentTiles[0] = memberTiles[x][yDown]; //top
-    adjacentTiles[1] = memberTiles[xUp][y]; //right
-    adjacentTiles[2] = memberTiles[x][yUp]; //bottom
-    adjacentTiles[3] = memberTiles[xDown][y]; //left
-    for(int i = 0; i < 4; i++){
-        if(adjacentTiles[i].textureIndex == texture){
-            typeCounter++;
-            
+    for(int i = 0; i < tile.numAdjacent; i++){
+        adjacentTiles[i] = pTileA[i];
+        int x = adjacentTiles[i].xPos;
+        int y = adjacentTiles[i].yPos;
+        if(adjacentTiles[i].isLand){
+            memberTiles[x][y].landWeight += adjConstant;
         }
     }
-    return typeCounter;
-}
-
-int Landmass::secondOrderOfType(Tile checkTile, int texIndex){
-    int x = checkTile.xPos;
-    int y = checkTile.yPos;
-    int xUp = xTopLimit(x + 1);
-    int xDown = limitToZero(x - 1);
-    int yUp = yTopLimit(y + 1);
-    int yDown = limitToZero(y - 1);
-    Tile adjacentTiles[4];
-    adjacentTiles[0] = memberTiles[x][yDown]; //top
-    adjacentTiles[1] = memberTiles[xUp][y]; //right
-    adjacentTiles[2] = memberTiles[x][yUp]; //bottom
-    adjacentTiles[3] = memberTiles[xDown][y]; //left
-    Tile secondOrderAdjacents[12];
-    int xA = adjacentTiles[0].xPos;
-    int yA = adjacentTiles[0].yPos;
-    int xAUp = xTopLimit(xA + 1);
-    int xADown = limitToZero(xA - 1);
-    int yADown = limitToZero(yA - 1);
-    secondOrderAdjacents[0] = memberTiles[xA][yADown]; //top.top
-    secondOrderAdjacents[1] = memberTiles[xAUp][yA]; //top.right
-    secondOrderAdjacents[2] = memberTiles[xADown][yA]; //top.left
-    int xB = adjacentTiles[1].xPos;
-    int yB = adjacentTiles[1].yPos;
-    int xBUp = xTopLimit(xB + 1);
-    int yBUp = yTopLimit(yB + 1);
-    int yBDown = limitToZero(yB - 1);
-    secondOrderAdjacents[3] = memberTiles[xB][yBDown]; //right.top
-    secondOrderAdjacents[4] = memberTiles[xBUp][yB];// right.right
-    secondOrderAdjacents[5] = memberTiles[xB][yBUp]; //right.bottom
-    int xC = adjacentTiles[2].xPos;
-    int yC = adjacentTiles[2].yPos;
-    int xCUp = xTopLimit(xC + 1);
-    int xCDown = limitToZero(xC - 1);
-    int yCUp = yTopLimit(yC + 1);
-    secondOrderAdjacents[6] = memberTiles[xCUp][yC];//bottom.right
-    secondOrderAdjacents[7] = memberTiles[xC][yCUp]; //bottom.bottom
-    secondOrderAdjacents[8] = memberTiles[xCDown][yC];
-    int xD = adjacentTiles[3].xPos;
-    int yD = adjacentTiles[3].yPos;
-    int xDDown = limitToZero(xD - 1);
-    int yDUp = yTopLimit(yD + 1);
-    int yDDown = limitToZero(yD - 1);
-    secondOrderAdjacents[9] = memberTiles[xD][yDDown];//left top
-    secondOrderAdjacents[10] = memberTiles[xD][yDUp];//left bottom
-    secondOrderAdjacents[11] = memberTiles[xDDown][yD];//left left
-    int count = 0;
-    for(int i = 0; i < 12; i++){
-        if(secondOrderAdjacents[i].textureIndex != 0){
-            secondOrderAdjacents[i].landWeight += 2;
-        }
-        if(secondOrderAdjacents[i].textureIndex == texIndex)
-        {
-            count++;
+    int inThreeConstant = 3;
+    Tile* pTileB = withinThree(tile);
+    Tile withinThree[20];
+    for(int n = 0; n < tile.numWithinThree; n++){
+        withinThree[n] = pTileB[n];
+        int x = withinThree[n].xPos;
+        int y = withinThree[n].yPos;
+        if(withinThree[n].isLand){
+            memberTiles[x][y].landWeight += inThreeConstant;
         }
     }
-    return count;
 }
-
-int Landmass::grassWeight(Tile checkTile){
-    int weight  = 0;
-    int adjacent1 = adjacentOfType(checkTile, 1);
-    adjacent1 = adjacent1 * 3;
-    int adjacent2 = secondOrderOfType(checkTile, 1);
-    weight = adjacent1 + adjacent2;
-    weight += rand() % 10;
-    return weight;
-}
-
-int Landmass::desertWeight(Tile checkTile){
-    int weight  = 0;
-    int adjacent1 = adjacentOfType(checkTile, 2);
-    adjacent1 = adjacent1 * 3;
-    int adjacent2 = secondOrderOfType(checkTile, 2);
-    weight = adjacent1 + adjacent2;
-    weight += rand() % 10;
-    return weight;
-}
-
-void Landmass::addWeights(){
-    landWeightSum = 0;
-    for(int i = 0; i < optionCount; i++){
-        landWeightSum += _optionTiles[i].landWeight;
-    }
-}
-int Landmass::randomIndex(int weightSum){
-    printf("starting addTile\n");
-    addWeights();
-    bool weightedChoice = false;
-    int indexChoice = 0;
-    int proxySum = weightSum;
-    int random = rand() % proxySum;
-    for(int i = 0; i < optionCount; i++){
-        if(random < _optionTiles[i].landWeight){
-            indexChoice = random;
-            weightedChoice = true;
-        } else {
-            random -= _optionTiles[i].landWeight;
-        }
-    }
-    if(weightedChoice == false){
-        indexChoice = rand() % optionCount;
-    }
-    return indexChoice;
-}
-void Landmass::addTile(){
-    //printf("starting addTile\n");
-    addWeights();
-    int indexChoice = randomIndex(landWeightSum);
-    int xChoice = _optionTiles[indexChoice].xPos;
-    int yChoice = _optionTiles[indexChoice].yPos;
-    bool chosen = false;
-    int newRand;
-    int failedLoops = 0;
-    for(int i = 0; i < 1; i++){
-        if(memberTiles[xChoice][yChoice].isLand){
-            i--;
-            printf("random choice invalid\n");
-            printf("%d, %d\n", xChoice, yChoice);
-            printf("optionCount: %d\n", optionCount);
-            newRand = rand() % (failedLoops + 20);
-            srand(newRand);
-            indexChoice = 0;
-            indexChoice = randomIndex(landWeightSum);
-            printf("Chosen index: %d\n", indexChoice );
-            xChoice = _optionTiles[indexChoice].xPos;
-            yChoice = _optionTiles[indexChoice].yPos;
-            addWeights();
-            failedLoops++;
-        } else {
-            chosen = true;
-        }
-    }
-    memberTiles[xChoice][yChoice].setIndex(1);
-    map.assignTexture(memberTiles[xChoice][yChoice]);
-    memberTiles[xChoice][yChoice].isLand = true;
-    memberCount++;
-    printf("Options: %d\n", optionCount);
-    printf("Members: %d\n", memberCount);
-    printf("addTile finished\n");
-    updateOptions(xChoice, yChoice);
-}
-
-void Landmass::createLandmass(Tile firstTile, int firstTex, int numTiles){
-    placeFirstTile(firstTile, firstTex);
-    printf("Total tiles: %d\n", numTiles);
-    for(int i = 1; i < numTiles; i++){
-        addTile();
-        printf("Tile number %d placed\n", i);
-    }
-    created = true;
-    printf("landmass created\n");
+void Landmass::addMember(int xPos, int yPos, int texIndex){
+    memberTiles[xPos][yPos].setIndex(texIndex);
+    memberTiles[xPos][yPos].isLand = true;
+    addOptionsFrom(memberTiles[xPos][yPos]);
 }
